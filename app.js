@@ -1,2 +1,2 @@
-let nama = "Aji Kowiyu"
+let nama = "Ronaldo"
 console.log(`Selamat datang ${nama}`)
