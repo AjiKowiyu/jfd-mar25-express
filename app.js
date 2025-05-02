@@ -1,1 +1,2 @@
-console.log('aplikasi baru')
+let nama = "Aji Kowiyu"
+console.log(`Selamat datang ${nama}`)
