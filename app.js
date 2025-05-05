@@ -2,8 +2,22 @@ const express   = require('express')
 const app       = express()
 
 
+app.set('view engine', 'ejs')   //setting penggunaan template engine untuk express
+app.set('views', 'view-ejs')    //setting penggunaan folder untuk menyimpan seluruh file .ejs
+
+
 app.get('/', (req, res)=>{
-  res.send('<h1>Hello World</h1><hr><hr><hr>')
+    res.render('beranda')
+})
+
+
+app.get('/profil', (req,res)=>{
+    let dataView = {
+        nama_coach: 'Aji Kowiyu',
+        profesi: 'Programmer',
+        pengalaman: ['Senior Developer', 'Web Programmer', 'Automation Programmer']
+    }
+    res.render('halaman-profil', dataView)
 })
 
 

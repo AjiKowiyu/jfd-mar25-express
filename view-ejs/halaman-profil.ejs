@@ -1,0 +1,18 @@
+<u><%= nama_coach %></u><br>
+<u><%= profesi %></u><br>
+
+
+<h2>Pengalaman kerja</h2>
+<hr>
+<% for( let i=0;  i < pengalaman.length;  i++ ) { %>
+    <b><%= pengalaman[i] %></b><br>
+<% } %>
+
+
+<h2>Pengalaman kerja</h2>
+<hr>
+<%
+    for (let i=0;  i < pengalaman.length;  i++) {
+        __append(`<b>${pengalaman[i]}</b><br>`)
+    }
+%>
