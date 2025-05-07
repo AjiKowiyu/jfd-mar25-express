@@ -1,0 +1,35 @@
+<h1>Karyawan Index</h1>
+<hr>
+
+<style>
+    .p5 {
+        padding: 5px;
+    }
+</style>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th class="p5">NIP</th>
+            <th class="p5">Nama Lengkap</th>
+            <th class="p5">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for( let i=0;  i < dakar.length;  i++ ) { %>
+            <tr>
+                <td class="p5"><%= dakar[i].nip %></td>
+                <td class="p5"><%= dakar[i].nama %></td>
+                <td class="p5">
+                    <a href="#">
+                        <button>detail</button>
+                    </a>
+                </td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<pre>
+<%= JSON.stringify(dakar, null, 4) %>
+</pre>
