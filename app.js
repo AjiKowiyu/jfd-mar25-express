@@ -73,6 +73,35 @@ app.get('/karyawan', async (req,res)=>{
 })
 
 
+app.get('/karyawan/detail/:id_karyawan', async (req,res)=>{
+    let id_kry = req.params.id_karyawan
+    let dataKaryawan = new Promise((resolve,reject)=>{
+        db.query(
+            `SELECT
+                karyawan.*,
+                departemen.nama AS dept_nama, departemen.singkatan,
+                agama.nama AS agama_nama
+            FROM karyawan
+            LEFT JOIN departemen ON karyawan.departemen_id = departemen.id
+            LEFT JOIN agama ON karyawan.agama_id = agama.id
+            WHERE karyawan.id = ?`,
+            [id_kry],
+            (errorSQL,dataSQL)=>{
+            if (errorSQL) {
+                reject(errorSQL)
+            } else {
+                resolve(dataSQL)
+            }
+        })
+    })
+
+    let dataView = {
+        dakar: await dataKaryawan
+    }
+    res.render('karyawan/detail', dataView)
+})
+
+
 app.listen(3000, ()=>{
     console.log('Server sudah on, silakan akses http://localhost:3000')
 })

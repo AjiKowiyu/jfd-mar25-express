@@ -21,15 +21,11 @@
                 <td class="p5"><%= dakar[i].nip %></td>
                 <td class="p5"><%= dakar[i].nama %></td>
                 <td class="p5">
-                    <a href="#">
-                        <button>detail</button>
+                    <a href="/karyawan/detail/<%= dakar[i].id %>">
+                        <button>Detail</button>
                     </a>
                 </td>
             </tr>
         <% } %>
     </tbody>
 </table>
-
-<pre>
-<%= JSON.stringify(dakar, null, 4) %>
-</pre>
