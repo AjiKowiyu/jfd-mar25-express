@@ -25,6 +25,9 @@ db.addListener('error', function(err) {
 
 
 
+// untuk mengambil data yg ter-encoded(enkripsi) dari form html
+// yang dikirimkan melalui protokol http
+app.use( express.urlencoded({extended:false}) )
 app.set('view engine', 'ejs')   //setting penggunaan template engine untuk express
 app.set('views', 'view-ejs')    //setting penggunaan folder untuk menyimpan seluruh file .ejs
 
@@ -100,6 +103,49 @@ app.get('/karyawan/detail/:id_karyawan', async (req,res)=>{
     }
     res.render('karyawan/detail', dataView)
 })
+
+
+
+app.get('/karyawan/tambah', (req,res)=>{
+    res.render('karyawan/form-tambah')
+})
+
+
+
+app.post('/karyawan/proses-simpan', async (req,res)=>{
+    let insertKaryawan = new Promise((resolve,reject)=>{
+        db.query(
+            `INSERT INTO karyawan
+            (nama, gender, alamat, nip, tanggal_lahir, nomor_telp)
+            VALUES
+            (
+                '${req.body.form_namalengkap}',
+                '${req.body.form_gender}',
+                '${req.body.form_alamat}',
+                '${req.body.form_nip}',
+                '${req.body.form_tgl_lahir}',
+                '${req.body.form_notelp}'
+            )`,
+            (errorSQL,feedbackSQL)=>{
+                if (errorSQL) {
+                    reject(errorSQL)
+                } else {
+                    resolve(feedbackSQL)
+                }
+            }
+        )
+    })
+    
+    try {
+        let insertKeDB = await insertKaryawan
+        if (insertKeDB.affectedRows > 0) {
+            res.redirect('/karyawan')
+        }
+    } catch (error) {
+        throw error
+    }
+})
+
 
 
 app.listen(3000, ()=>{
