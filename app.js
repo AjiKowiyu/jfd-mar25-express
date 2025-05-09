@@ -1,6 +1,7 @@
 const express   = require('express')
 const app       = express()
 const mysql     = require('mysql2')
+const {body, query, validationResult} = require('express-validator')
 
 
 // koneksi ke mysql
@@ -112,38 +113,68 @@ app.get('/karyawan/tambah', (req,res)=>{
 
 
 
-app.post('/karyawan/proses-simpan', async (req,res)=>{
-    let insertKaryawan = new Promise((resolve,reject)=>{
-        db.query(
-            `INSERT INTO karyawan
-            (nama, gender, alamat, nip, tanggal_lahir, nomor_telp)
-            VALUES
-            (
-                '${req.body.form_namalengkap}',
-                '${req.body.form_gender}',
-                '${req.body.form_alamat}',
-                '${req.body.form_nip}',
-                '${req.body.form_tgl_lahir}',
-                '${req.body.form_notelp}'
-            )`,
-            (errorSQL,feedbackSQL)=>{
-                if (errorSQL) {
-                    reject(errorSQL)
-                } else {
-                    resolve(feedbackSQL)
-                }
-            }
-        )
-    })
-    
-    try {
-        let insertKeDB = await insertKaryawan
-        if (insertKeDB.affectedRows > 0) {
-            res.redirect('/karyawan')
-        }
-    } catch (error) {
-        throw error
+let validasi_insertKaryawanBaru = [
+    body('form_namalengkap').notEmpty().isString(),
+    body('form_nip').notEmpty().isNumeric(),
+]
+
+
+
+app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)=>{
+    let isiForm = {
+        namalengkap : req.body.form_namalengkap,
+        gender      : req.body.form_gender,
+        alamat      : req.body.form_alamat,
+        nip         : req.body.form_nip,
+        tgl_lahir   : req.body.form_tgl_lahir,
+        notel       : req.body.form_notel,
     }
+    let validationError = validationResult(req)
+
+    // jika lolos validasi
+    if (validationError.isEmpty()) {
+        let insertKaryawan = new Promise((resolve,reject)=>{
+            db.query(
+                `INSERT INTO karyawan
+                (nama, gender, alamat, nip, tanggal_lahir, nomor_telp)
+                VALUES
+                (
+                    '${req.body.form_namalengkap}',
+                    '${req.body.form_gender}',
+                    '${req.body.form_alamat}',
+                    '${req.body.form_nip}',
+                    '${req.body.form_tgl_lahir}',
+                    '${req.body.form_notelp}'
+                )`,
+                (errorSQL,feedbackSQL)=>{
+                    if (errorSQL) {
+                        reject(errorSQL)
+                    } else {
+                        resolve(feedbackSQL)
+                    }
+                }
+            )
+        })
+        
+        try {
+            let insertKeDB = await insertKaryawan
+            if (insertKeDB.affectedRows > 0) {
+                return res.redirect('/karyawan')
+            }
+        } catch (error) {
+            throw error
+        }
+    }
+
+
+    // jika validasi gagal
+    let errorData = {
+        pesanError: validationError.array(),
+        ketikanForm: isiForm,
+    }
+    console.log(errorData.pesanError)
+    // errorData.pesanError[0].fields
+    return res.render('karyawan/form-tambah', errorData)
 })
 
 

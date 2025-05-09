@@ -1,6 +1,13 @@
 <h1>Input data karyawan baru</h1>
 <hr>
 
+<% if (typeof pesanError !== 'undefined') { %>
+    <span style="color: red;">
+        <%= pesanError[0].path +': '+ pesanError[0].msg +' '+ pesanError[0].value %>
+    </span>
+    <br><br>
+<% } %>
+
 <form action="/karyawan/proses-simpan" method="post">
     <table>
         <tr>
@@ -8,7 +15,7 @@
                 <label>Nama lengkap</label>
             </td>
             <td>
-                <input type="text" name="form_namalengkap">
+                <input type="text" name="form_namalengkap" value="<%= (typeof ketikanForm !== 'undefined') ? ketikanForm.namalengkap : '' %>">
             </td>
         </tr>
         <tr>
