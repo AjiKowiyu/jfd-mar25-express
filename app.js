@@ -1,7 +1,9 @@
 const express   = require('express')
 const app       = express()
 const mysql     = require('mysql2')
+const moment    = require('moment')
 const {body, query, validationResult} = require('express-validator')
+moment.locale('id')
 
 
 // koneksi ke mysql
@@ -100,7 +102,8 @@ app.get('/karyawan/detail/:id_karyawan', async (req,res)=>{
     })
 
     let dataView = {
-        dakar: await dataKaryawan
+        dakar: await dataKaryawan,
+        moment: moment,
     }
     res.render('karyawan/detail', dataView)
 })
@@ -203,6 +206,71 @@ app.get('/karyawan/hapus/:id_karyawan', async(req,res)=>{
         throw error
     }
 
+})
+
+
+
+app.get('/karyawan/edit/:id_karyawan', async(req,res)=>{
+    let id_kry = req.params.id_karyawan
+    let dataKaryawan = new Promise((resolve,reject)=>{
+        db.query(
+            `SELECT
+                karyawan.*,
+                departemen.nama AS dept_nama, departemen.singkatan,
+                agama.nama AS agama_nama
+            FROM karyawan
+            LEFT JOIN departemen ON karyawan.departemen_id = departemen.id
+            LEFT JOIN agama ON karyawan.agama_id = agama.id
+            WHERE karyawan.id = ?`,
+            [id_kry],
+            (errorSQL,dataSQL)=>{
+            if (errorSQL) {
+                reject(errorSQL)
+            } else {
+                resolve(dataSQL)
+            }
+        })
+    })
+
+    let dataView = {
+        dakar: await dataKaryawan,
+        moment: moment,
+    }
+    res.render('karyawan/form-edit', dataView)
+})
+
+
+
+app.post('/karyawan/proses-update/:id_karyawan', async(req,res)=>{
+    let id_kry      = req.params.id_karyawan
+    let update_kry  = new Promise((resolve,reject)=>{
+        db.query(
+            `UPDATE karyawan SET
+                nama            = '${req.body.form_namalengkap}',
+                gender          = '${req.body.form_gender}',
+                alamat          = '${req.body.form_alamat}',
+                nip             = '${req.body.form_nip}',
+                tanggal_lahir   = '${req.body.form_tgl_lahir}',
+                nomor_telp      = '${req.body.form_notelp}'
+            WHERE karyawan.id = ?`,
+            [id_kry],
+            (errorSQL,dataSQL)=>{
+            if (errorSQL) {
+                reject(errorSQL)
+            } else {
+                resolve(dataSQL)
+            }
+        })
+    })
+
+    try {
+        let updateKeDB = await update_kry
+        if (updateKeDB.affectedRows > 0) {
+            return res.redirect('/karyawan')
+        }
+    } catch (error) {
+        throw error
+    }
 })
 
 

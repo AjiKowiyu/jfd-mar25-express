@@ -1,0 +1,70 @@
+<h1>Edit profil karyawan</h1>
+<hr>
+
+
+<% if (typeof pesanError !== 'undefined') { %>
+    <span style="color: red;">
+        <%= pesanError[0].path +': '+ pesanError[0].msg +' '+ pesanError[0].value %>
+    </span>
+    <br><br>
+<% } %>
+
+<form action="/karyawan/proses-update/<%= dakar[0].id %>" method="post">
+    <table>
+        <tr>
+            <td>
+                <label>Nama lengkap</label>
+            </td>
+            <td>
+                <input type="text" name="form_namalengkap" value="<%= dakar[0].nama %>">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Jenis Kelamin</label>
+            </td>
+            <td>
+                <select name="form_gender">
+                    <option value="">-- pilih --</option>
+                    <option <%= (dakar[0].gender == 'L') ? 'selected' : '' %> value="L">Laki</option>
+                    <option <%= (dakar[0].gender == 'P') ? 'selected' : '' %> value="P">Perempuan</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Alamat tinggal</label>
+            </td>
+            <td>
+                <textarea name="form_alamat" rows="5" cols="50"><%= dakar[0].alamat %></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Nomor Induk Pegawai</label>
+            </td>
+            <td>
+                <input type="text" name="form_nip" value="<%= dakar[0].nip %>">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Tanggal Lahir</label>
+            </td>
+            <td>
+                <input type="date" name="form_tgl_lahir" value="<%= moment(dakar[0].tanggal_lahir).format('YYYY-MM-DD') %>">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Nomor Telpon</label>
+            </td>
+            <td>
+                <input type="text" name="form_notelp" value="<%= dakar[0].nomor_telp %>">
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <button type="submit">update</button>
+</form>
