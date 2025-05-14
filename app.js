@@ -179,6 +179,34 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
 
 
 
+app.get('/karyawan/hapus/:id_karyawan', async(req,res)=>{
+    let id_kry      = req.params.id_karyawan
+    let hapus_kry   = new Promise((resolve,reject)=>{
+        db.query(
+            `DELETE FROM karyawan WHERE id = ?`,[id_kry],
+            (errorSQL,feedbackSQL)=>{
+                if (errorSQL) {
+                    reject(errorSQL)
+                } else {
+                    resolve(feedbackSQL)
+                }
+            }
+        )
+    })
+
+    try {
+        let hapusDiDB = await hapus_kry
+        if (hapusDiDB.affectedRows > 0) {
+            return res.redirect('/karyawan')
+        }
+    } catch (error) {
+        throw error
+    }
+
+})
+
+
+
 app.listen(3000, ()=>{
     console.log('Server sudah on, silakan akses http://localhost:3000')
 })

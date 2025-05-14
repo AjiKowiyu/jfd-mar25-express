@@ -26,8 +26,11 @@
                 <td class="p5"><%= dakar[i].nip %></td>
                 <td class="p5"><%= dakar[i].nama %></td>
                 <td class="p5">
-                    <a href="/karyawan/detail/<%= dakar[i].id %>">
+                    <a href="/karyawan/detail/<%= dakar[i].id %>" style="margin-right: 10px;">
                         <button>Detail</button>
+                    </a>
+                    <a href="/karyawan/hapus/<%= dakar[i].id %>" onclick="return confirm('Yakin ingin hapus karyawan a/n <%= dakar[i].nama %> ?\nHati-hati! Data yang dihapus bersifat permanen!')">
+                        <button>Hapus</button>
                     </a>
                 </td>
             </tr>
