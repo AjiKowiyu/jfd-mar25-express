@@ -27,26 +27,9 @@ db.addListener('error', function(err) {
 })
 
 
-let dataDepartemen = new Promise((resolve,reject)=>{
-    db.query(`SELECT * FROM departemen`, (errorSQL,dataSQL)=>{
-        if (errorSQL) {
-            reject(errorSQL)
-        } else {
-            resolve(dataSQL)
-        }
-    })
-})
-
-let dataAgama = new Promise((resolve,reject)=>{
-    db.query(`SELECT * FROM agama`, (errorSQL,dataSQL)=>{
-        if (errorSQL) {
-            reject(errorSQL)
-        } else {
-            resolve(dataSQL)
-        }
-    })
-})
-
+let model_agama         = require('./model/model_agama')
+let model_departemen    = require('./model/model_departemen')
+let model_karyawan      = require('./model/model_karyawan')
 
 
 // untuk mengambil data yg ter-encoded(enkripsi) dari form html
@@ -72,29 +55,8 @@ app.get('/profil', (req,res)=>{
 
 
 app.get('/karyawan', async (req,res)=>{
-    let dataKaryawan = new Promise((resolve,reject)=>{
-        db.query('SELECT * FROM karyawan', (errorSQL,dataSQL)=>{
-            if (errorSQL) {
-                reject(errorSQL)
-            } else {
-                resolve(dataSQL)
-            }
-        })
-    })
-
-    let dataDepartemen = new Promise((resolve,reject)=>{
-        db.query('SELECT * FROM departemen', (errorSQL,dataSQL)=>{
-            if (errorSQL) {
-                reject(errorSQL)
-            } else {
-                resolve(dataSQL)
-            }
-        })
-    })
-
     let dataView = {
-        dakar: await dataKaryawan,
-        dadep: await dataDepartemen,
+        dakar: await model_karyawan.getAll(),
         notif: req.query.msg,
     }
     res.render('karyawan/index', dataView)
@@ -103,28 +65,9 @@ app.get('/karyawan', async (req,res)=>{
 
 app.get('/karyawan/detail/:id_karyawan', async (req,res)=>{
     let id_kry = req.params.id_karyawan
-    let dataKaryawan = new Promise((resolve,reject)=>{
-        db.query(
-            `SELECT
-                karyawan.*,
-                departemen.nama AS dept_nama, departemen.singkatan,
-                agama.nama AS agama_nama
-            FROM karyawan
-            LEFT JOIN departemen ON karyawan.departemen_id = departemen.id
-            LEFT JOIN agama ON karyawan.agama_id = agama.id
-            WHERE karyawan.id = ?`,
-            [id_kry],
-            (errorSQL,dataSQL)=>{
-            if (errorSQL) {
-                reject(errorSQL)
-            } else {
-                resolve(dataSQL)
-            }
-        })
-    })
 
     let dataView = {
-        dakar: await dataKaryawan,
+        dakar: await model_karyawan.getOne(id_kry),
         moment: moment,
     }
     res.render('karyawan/detail', dataView)
@@ -134,8 +77,8 @@ app.get('/karyawan/detail/:id_karyawan', async (req,res)=>{
 
 app.get('/karyawan/tambah', async (req,res)=>{
     let dataView = {
-        dept: await dataDepartemen,
-        agama: await dataAgama,
+        dept: await model_departemen.getAll(),
+        agama: await model_agama.getAll(),
     }
 
     res.render('karyawan/form-tambah', dataView)
@@ -163,33 +106,8 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
 
     // jika lolos validasi
     if (validationError.isEmpty()) {
-        let insertKaryawan = new Promise((resolve,reject)=>{
-            db.query(
-                `INSERT INTO karyawan
-                (nama, gender, alamat, nip, tanggal_lahir, nomor_telp, departemen_id, agama_id)
-                VALUES
-                (
-                    '${req.body.form_namalengkap}',
-                    '${req.body.form_gender}',
-                    '${req.body.form_alamat}',
-                    '${req.body.form_nip}',
-                    '${req.body.form_tgl_lahir}',
-                    '${req.body.form_notelp}',
-                    '${req.body.form_departemen}',
-                    '${req.body.form_agama}'
-                )`,
-                (errorSQL,feedbackSQL)=>{
-                    if (errorSQL) {
-                        reject(errorSQL)
-                    } else {
-                        resolve(feedbackSQL)
-                    }
-                }
-            )
-        })
-        
         try {
-            let insertKeDB = await insertKaryawan
+            let insertKeDB = await model_karyawan.insert(req)
             if (insertKeDB.affectedRows > 0) {
                 return res.redirect('/karyawan?msg=Berhasil membuat karyawan baru')
             }
@@ -203,8 +121,8 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
     let errorData = {
         pesanError: validationError.array(),
         ketikanForm: isiForm,
-        dept: await dataDepartemen,
-        agama: await dataAgama,
+        dept: await model_departemen.getAll(),
+        agama: await model_agama.getAll(),
     }
     console.log(errorData.pesanError)
     // errorData.pesanError[0].fields
@@ -214,22 +132,9 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
 
 
 app.get('/karyawan/hapus/:id_karyawan', async(req,res)=>{
-    let id_kry      = req.params.id_karyawan
-    let hapus_kry   = new Promise((resolve,reject)=>{
-        db.query(
-            `DELETE FROM karyawan WHERE id = ?`,[id_kry],
-            (errorSQL,feedbackSQL)=>{
-                if (errorSQL) {
-                    reject(errorSQL)
-                } else {
-                    resolve(feedbackSQL)
-                }
-            }
-        )
-    })
-
+    let id_kry = req.params.id_karyawan
     try {
-        let hapusDiDB = await hapus_kry
+        let hapusDiDB = await model_karyawan.hapus(id_kry)
         if (hapusDiDB.affectedRows > 0) {
             return res.redirect('/karyawan?msg=Berhasil hapus karyawan!')
         }
@@ -243,30 +148,10 @@ app.get('/karyawan/hapus/:id_karyawan', async(req,res)=>{
 
 app.get('/karyawan/edit/:id_karyawan', async(req,res)=>{
     let id_kry = req.params.id_karyawan
-    let dataKaryawan = new Promise((resolve,reject)=>{
-        db.query(
-            `SELECT
-                karyawan.*,
-                departemen.nama AS dept_nama, departemen.singkatan,
-                agama.nama AS agama_nama
-            FROM karyawan
-            LEFT JOIN departemen ON karyawan.departemen_id = departemen.id
-            LEFT JOIN agama ON karyawan.agama_id = agama.id
-            WHERE karyawan.id = ?`,
-            [id_kry],
-            (errorSQL,dataSQL)=>{
-            if (errorSQL) {
-                reject(errorSQL)
-            } else {
-                resolve(dataSQL)
-            }
-        })
-    })
-
     let dataView = {
-        dakar: await dataKaryawan,
-        dept: await dataDepartemen,
-        agama: await dataAgama,
+        dakar: await model_karyawan.getOne(id_kry),
+        dept: await model_departemen.getAll(),
+        agama: await model_agama.getAll(),
         moment: moment,
     }
     res.render('karyawan/form-edit', dataView)
@@ -275,31 +160,9 @@ app.get('/karyawan/edit/:id_karyawan', async(req,res)=>{
 
 
 app.post('/karyawan/proses-update/:id_karyawan', async(req,res)=>{
-    let id_kry      = req.params.id_karyawan
-    let update_kry  = new Promise((resolve,reject)=>{
-        db.query(
-            `UPDATE karyawan SET
-                nama            = '${req.body.form_namalengkap}',
-                gender          = '${req.body.form_gender}',
-                alamat          = '${req.body.form_alamat}',
-                nip             = '${req.body.form_nip}',
-                tanggal_lahir   = '${req.body.form_tgl_lahir}',
-                nomor_telp      = '${req.body.form_notelp}',
-                departemen_id   = '${req.body.form_departemen}',
-                agama_id        = '${req.body.form_agama}'
-            WHERE karyawan.id = ?`,
-            [id_kry],
-            (errorSQL,dataSQL)=>{
-            if (errorSQL) {
-                reject(errorSQL)
-            } else {
-                resolve(dataSQL)
-            }
-        })
-    })
-
+    let id_kry = req.params.id_karyawan
     try {
-        let updateKeDB = await update_kry
+        let updateKeDB = await model_karyawan.update(req, id_kry)
         if (updateKeDB.affectedRows > 0) {
             return res.redirect(`/karyawan?msg=Berhasil edit profil karyawan atas nama ${req.body.form_namalengkap}`)
         }
