@@ -95,6 +95,7 @@ app.get('/karyawan', async (req,res)=>{
     let dataView = {
         dakar: await dataKaryawan,
         dadep: await dataDepartemen,
+        notif: req.query.msg,
     }
     res.render('karyawan/index', dataView)
 })
@@ -190,7 +191,7 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
         try {
             let insertKeDB = await insertKaryawan
             if (insertKeDB.affectedRows > 0) {
-                return res.redirect('/karyawan')
+                return res.redirect('/karyawan?msg=Berhasil membuat karyawan baru')
             }
         } catch (error) {
             throw error
@@ -230,7 +231,7 @@ app.get('/karyawan/hapus/:id_karyawan', async(req,res)=>{
     try {
         let hapusDiDB = await hapus_kry
         if (hapusDiDB.affectedRows > 0) {
-            return res.redirect('/karyawan')
+            return res.redirect('/karyawan?msg=Berhasil hapus karyawan!')
         }
     } catch (error) {
         throw error
@@ -300,7 +301,7 @@ app.post('/karyawan/proses-update/:id_karyawan', async(req,res)=>{
     try {
         let updateKeDB = await update_kry
         if (updateKeDB.affectedRows > 0) {
-            return res.redirect('/karyawan')
+            return res.redirect(`/karyawan?msg=Berhasil edit profil karyawan atas nama ${req.body.form_namalengkap}`)
         }
     } catch (error) {
         throw error
