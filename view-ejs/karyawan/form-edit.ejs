@@ -63,6 +63,32 @@
                 <input type="text" name="form_notelp" value="<%= dakar[0].nomor_telp %>">
             </td>
         </tr>
+        <tr>
+            <td>
+                <label>Departemen</label>
+            </td>
+            <td>
+                <select name="form_departemen">
+                    <option value="">-- pilih --</option>
+                    <% dept.forEach( (dp)=>{ %>
+                        <option <%= (dakar[0].departemen_id == dp.id) ? 'selected' : '' %> value="<%= dp.id %>"><%= dp.nama %> (<%= dp.singkatan %>)</option>
+                    <% }) %>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Agama</label>
+            </td>
+            <td>
+                <select name="form_agama">
+                    <option value="">-- pilih --</option>
+                    <% agama.forEach( (agm)=>{ %>
+                        <option <%= (dakar[0].agama_id == agm.id) ? 'selected' : '' %> value="<%= agm.id %>"><%= agm.nama %></option>
+                    <% }) %>
+                </select>
+            </td>
+        </tr>
     </table>
     <br>
 

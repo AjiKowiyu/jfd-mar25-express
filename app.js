@@ -264,6 +264,8 @@ app.get('/karyawan/edit/:id_karyawan', async(req,res)=>{
 
     let dataView = {
         dakar: await dataKaryawan,
+        dept: await dataDepartemen,
+        agama: await dataAgama,
         moment: moment,
     }
     res.render('karyawan/form-edit', dataView)
@@ -281,7 +283,9 @@ app.post('/karyawan/proses-update/:id_karyawan', async(req,res)=>{
                 alamat          = '${req.body.form_alamat}',
                 nip             = '${req.body.form_nip}',
                 tanggal_lahir   = '${req.body.form_tgl_lahir}',
-                nomor_telp      = '${req.body.form_notelp}'
+                nomor_telp      = '${req.body.form_notelp}',
+                departemen_id   = '${req.body.form_departemen}',
+                agama_id        = '${req.body.form_agama}'
             WHERE karyawan.id = ?`,
             [id_kry],
             (errorSQL,dataSQL)=>{
