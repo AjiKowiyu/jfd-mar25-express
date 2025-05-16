@@ -62,6 +62,32 @@
                 <input type="text" name="form_notelp">
             </td>
         </tr>
+        <tr>
+            <td>
+                <label>Departemen</label>
+            </td>
+            <td>
+                <select name="form_departemen">
+                    <option value="">-- pilih --</option>
+                    <% dept.forEach( (dp)=>{ %>
+                        <option value="<%= dp.id %>"><%= dp.nama %> (<%= dp.singkatan %>)</option>
+                    <% }) %>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label>Agama</label>
+            </td>
+            <td>
+                <select name="form_agama">
+                    <option value="">-- pilih --</option>
+                    <% agama.forEach( (agm)=>{ %>
+                        <option value="<%= agm.id %>"><%= agm.nama %></option>
+                    <% }) %>
+                </select>
+            </td>
+        </tr>
     </table>
     <br>
 

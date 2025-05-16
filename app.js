@@ -27,6 +27,27 @@ db.addListener('error', function(err) {
 })
 
 
+let dataDepartemen = new Promise((resolve,reject)=>{
+    db.query(`SELECT * FROM departemen`, (errorSQL,dataSQL)=>{
+        if (errorSQL) {
+            reject(errorSQL)
+        } else {
+            resolve(dataSQL)
+        }
+    })
+})
+
+let dataAgama = new Promise((resolve,reject)=>{
+    db.query(`SELECT * FROM agama`, (errorSQL,dataSQL)=>{
+        if (errorSQL) {
+            reject(errorSQL)
+        } else {
+            resolve(dataSQL)
+        }
+    })
+})
+
+
 
 // untuk mengambil data yg ter-encoded(enkripsi) dari form html
 // yang dikirimkan melalui protokol http
@@ -110,8 +131,13 @@ app.get('/karyawan/detail/:id_karyawan', async (req,res)=>{
 
 
 
-app.get('/karyawan/tambah', (req,res)=>{
-    res.render('karyawan/form-tambah')
+app.get('/karyawan/tambah', async (req,res)=>{
+    let dataView = {
+        dept: await dataDepartemen,
+        agama: await dataAgama,
+    }
+
+    res.render('karyawan/form-tambah', dataView)
 })
 
 
@@ -139,7 +165,7 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
         let insertKaryawan = new Promise((resolve,reject)=>{
             db.query(
                 `INSERT INTO karyawan
-                (nama, gender, alamat, nip, tanggal_lahir, nomor_telp)
+                (nama, gender, alamat, nip, tanggal_lahir, nomor_telp, departemen_id, agama_id)
                 VALUES
                 (
                     '${req.body.form_namalengkap}',
@@ -147,7 +173,9 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
                     '${req.body.form_alamat}',
                     '${req.body.form_nip}',
                     '${req.body.form_tgl_lahir}',
-                    '${req.body.form_notelp}'
+                    '${req.body.form_notelp}',
+                    '${req.body.form_departemen}',
+                    '${req.body.form_agama}'
                 )`,
                 (errorSQL,feedbackSQL)=>{
                     if (errorSQL) {
@@ -174,6 +202,8 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, async (req,res)
     let errorData = {
         pesanError: validationError.array(),
         ketikanForm: isiForm,
+        dept: await dataDepartemen,
+        agama: await dataAgama,
     }
     console.log(errorData.pesanError)
     // errorData.pesanError[0].fields
