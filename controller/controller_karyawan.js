@@ -55,7 +55,17 @@ module.exports =
         // jika lolos validasi
         if (validationError.isEmpty()) {
             try {
-                let insertKeDB = await model_karyawan.insert(req)
+                let dataSQL = {
+                    nama            : req.body.form_namalengkap,
+                    gender          : req.body.form_gender,
+                    alamat          : req.body.form_alamat,
+                    nip             : 'tb-' + req.body.form_nip,
+                    tanggal_lahir   : req.body.form_tgl_lahir,
+                    nomor_telp      : req.body.form_notelp,
+                    departemen_id   : req.body.form_departemen,
+                    agama_id        : req.body.form_agama
+                }
+                let insertKeDB = await model_karyawan.insert(dataSQL)
                 if (insertKeDB.affectedRows > 0) {
                     return res.redirect('/karyawan?msg=Berhasil membuat karyawan baru')
                 }
@@ -107,8 +117,16 @@ module.exports =
 
     proses_update: async(req,res)=>{
         let id_kry = req.params.id_karyawan
+        let dataSQL = {
+            alamat          : req.body.form_alamat,
+            tanggal_lahir   : req.body.form_tgl_lahir,
+            nomor_telp      : req.body.form_notelp,
+            departemen_id   : req.body.form_departemen,
+            agama_id        : req.body.form_agama
+        }
+
         try {
-            let updateKeDB = await model_karyawan.update(req, id_kry)
+            let updateKeDB = await model_karyawan.update(dataSQL, id_kry)
             if (updateKeDB.affectedRows > 0) {
                 return res.redirect(`/karyawan?msg=Berhasil edit profil karyawan atas nama ${req.body.form_namalengkap}`)
             }

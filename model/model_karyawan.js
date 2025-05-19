@@ -34,21 +34,9 @@ module.exports =
 
 
 
-    insert: function (req) {
+    insert: function (dataSQL) {
         let syntaxSQL = mysql.format(
-            `INSERT INTO karyawan
-            (nama, gender, alamat, nip, tanggal_lahir, nomor_telp, departemen_id, agama_id)
-            VALUES
-            (
-                '${req.body.form_namalengkap}',
-                '${req.body.form_gender}',
-                '${req.body.form_alamat}',
-                '${req.body.form_nip}',
-                '${req.body.form_tgl_lahir}',
-                '${req.body.form_notelp}',
-                '${req.body.form_departemen}',
-                '${req.body.form_agama}'
-            )`
+            `INSERT INTO karyawan SET ?`, [dataSQL]
         )
         return eksekusi( syntaxSQL ) 
     },
@@ -64,19 +52,10 @@ module.exports =
 
 
 
-    update: function(req, id_kry) {
+    update: function(dataSQL, id_kry) {
         let syntaxSQL = mysql.format(
-            `UPDATE karyawan SET
-                nama            = '${req.body.form_namalengkap}',
-                gender          = '${req.body.form_gender}',
-                alamat          = '${req.body.form_alamat}',
-                nip             = '${req.body.form_nip}',
-                tanggal_lahir   = '${req.body.form_tgl_lahir}',
-                nomor_telp      = '${req.body.form_notelp}',
-                departemen_id   = '${req.body.form_departemen}',
-                agama_id        = '${req.body.form_agama}'
-            WHERE karyawan.id = ?`,
-            [id_kry]
+            `UPDATE karyawan SET ? WHERE karyawan.id = ?`,
+            [dataSQL, id_kry]
         )
         return eksekusi( syntaxSQL )
     }
