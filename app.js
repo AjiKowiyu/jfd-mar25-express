@@ -1,35 +1,9 @@
 const express   = require('express')
 const app       = express()
-const mysql     = require('mysql2')
 const moment    = require('moment')
 const {body, query, validationResult} = require('express-validator')
 moment.locale('id')
 
-
-// koneksi ke mysql
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'jfd_maret_2025',
-})
-
-
-// koneksi
-db.connect( function(){
-    console.log('Berhasil terhubung ke mysql\n=================');
-})
-
-
-// untuk menangkap error terkait koneksi dengan mysql
-db.addListener('error', function(err) {
-    console.log(err)
-})
-
-
-let model_agama         = require('./model/model_agama')
-let model_departemen    = require('./model/model_departemen')
-let model_karyawan      = require('./model/model_karyawan')
 
 let controller_beranda  = require('./controller/controller_beranda')
 let controller_profil   = require('./controller/controller_profil')
