@@ -21,6 +21,20 @@ db.addListener('error', function(err) {
 })
 
 
+
+function eksekusi(scriptSQL_dan_parameterData) {
+    return new Promise((resolve,reject)=>{
+        db.query(scriptSQL_dan_parameterData, (errorSQL,dataSQL)=>{
+            if (errorSQL) {
+                reject(errorSQL)
+            } else {
+                resolve(dataSQL)
+            }
+        })
+    })
+}
+
+
 module.exports = {
-    db
+    db, eksekusi
 }
