@@ -13,6 +13,8 @@ let controller_karyawan = require('./controller/controller_karyawan')
 // untuk mengambil data yg ter-encoded(enkripsi) dari form html
 // yang dikirimkan melalui protokol http
 app.use( express.urlencoded({extended:false}) )
+app.use( express.static('public') )
+
 app.set('view engine', 'ejs')   //setting penggunaan template engine untuk express
 app.set('views', 'view-ejs')    //setting penggunaan folder untuk menyimpan seluruh file .ejs
 
