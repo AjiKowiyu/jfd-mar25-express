@@ -11,15 +11,21 @@
     </head>
     <body class="d-flex align-items-center py-4 bg-body-tertiary">
         <main class="form-signin w-100 m-auto">
-            <form>
+            <form method="post" action="/auth/proses-login">
                 <img src="img/dosencoding-bw.png" alt="" class="bi mt-4 mb-3" width="100">
+                <% if (typeof notif !== 'undefined') { %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <%= notif %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
                 <h1 class="h3 mb-3 fw-normal">Silakan masuk</h1>
                 <div class="form-floating">
-                    <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" />
-                    <label for="floatingInput">Alamat Email</label>
+                    <input type="text" class="form-control" id="floatingInput" name="form_username" placeholder="name@example.com" />
+                    <label for="floatingInput">Username</label>
                 </div>
                 <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" />
+                    <input type="password" class="form-control" id="floatingPassword" name="form_password" placeholder="Password" />
                     <label for="floatingPassword">Kata sandi</label>
                 </div>
                 <button class="btn btn-primary w-100 py-2" type="submit">Masuk</button>

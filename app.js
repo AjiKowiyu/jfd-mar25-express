@@ -36,6 +36,7 @@ app.get('/karyawan/edit/:id_karyawan', controller_karyawan.halaman_karyawan_form
 app.post('/karyawan/proses-update/:id_karyawan', controller_karyawan.proses_update)
 
 app.get('/login', controller_auth.halaman_login)
+app.post('/auth/proses-login', controller_auth.proses_login)
 
 
 app.listen(3000, ()=>{
