@@ -8,6 +8,7 @@ moment.locale('id')
 let controller_beranda  = require('./controller/controller_beranda')
 let controller_profil   = require('./controller/controller_profil')
 let controller_karyawan = require('./controller/controller_karyawan')
+let controller_auth     = require('./controller/controller_auth')
 
 
 // untuk mengambil data yg ter-encoded(enkripsi) dari form html
@@ -33,6 +34,8 @@ app.post('/karyawan/proses-simpan', validasi_insertKaryawanBaru, controller_kary
 app.get('/karyawan/hapus/:id_karyawan', controller_karyawan.hapus)
 app.get('/karyawan/edit/:id_karyawan', controller_karyawan.halaman_karyawan_form_edit)
 app.post('/karyawan/proses-update/:id_karyawan', controller_karyawan.proses_update)
+
+app.get('/login', controller_auth.halaman_login)
 
 
 app.listen(3000, ()=>{
