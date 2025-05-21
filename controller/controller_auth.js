@@ -1,4 +1,5 @@
-const model_user = require("../model/model_user")
+const bcrypt        = require('bcryptjs')
+const model_user    = require("../model/model_user")
 
 module.exports =
 {
@@ -20,9 +21,22 @@ module.exports =
         // cek username yg diinput ada gak di database
         let username_exist = await model_user.cari_username(form_username)
 
+        // jika username ada di db
         if (username_exist.length > 0) {
-            res.send('username ada di db')
-        } else {
+            // cek password yang diinput cocok gak ?
+            let password_cocok = bcrypt.compareSync(form_password, username_exist[0].password)
+            if (password_cocok) {
+                // izinkan masuk ke halaman utama sistem
+                res.redirect('/dashboard')
+            } else {
+                // kembalikan ke halaman login
+                let pesan = 'Password salah !!'
+                res.redirect(`/login?msg=${pesan}`)
+            }
+        }
+        // jika username gak ada di db
+        else {
+            // kembalikan ke halaman login dengan notifikasi
             let pesan = 'Username tidak terdaftar, silakan hubungi HRD !!'
             res.redirect(`/login?msg=${pesan}`)
         }
