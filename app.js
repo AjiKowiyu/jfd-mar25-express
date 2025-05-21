@@ -9,6 +9,7 @@ let controller_beranda  = require('./controller/controller_beranda')
 let controller_profil   = require('./controller/controller_profil')
 let controller_karyawan = require('./controller/controller_karyawan')
 let controller_auth     = require('./controller/controller_auth')
+let controller_dashboard= require('./controller/controller_dashboard')
 
 
 // untuk mengambil data yg ter-encoded(enkripsi) dari form html
@@ -38,6 +39,7 @@ app.post('/karyawan/proses-update/:id_karyawan', controller_karyawan.proses_upda
 app.get('/login', controller_auth.halaman_login)
 app.post('/auth/proses-login', controller_auth.proses_login)
 
+app.get('/dashboard', controller_dashboard.halaman_utama)
 
 app.listen(3000, ()=>{
     console.log('Server sudah on, silakan akses http://localhost:3000')
