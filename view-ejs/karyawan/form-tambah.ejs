@@ -1,3 +1,5 @@
+<%- include('../layout/head') %>
+
 <h1>Input data karyawan baru</h1>
 <hr>
 
@@ -9,87 +11,58 @@
 <% } %>
 
 <form action="/karyawan/proses-simpan" method="post">
-    <table>
-        <tr>
-            <td>
-                <label>Nama lengkap</label>
-            </td>
-            <td>
-                <input type="text" name="form_namalengkap" value="<%= (typeof ketikanForm !== 'undefined') ? ketikanForm.namalengkap : '' %>">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Jenis Kelamin</label>
-            </td>
-            <td>
-                <select name="form_gender">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="mb-3">
+                <label class="form-label">Nama lengkap</label>
+                <input class="form-control" type="text" name="form_namalengkap" value="<%= (typeof ketikanForm !== 'undefined') ? ketikanForm.namalengkap : '' %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Jenis Kelamin</label>
+                <select class="form-select" name="form_gender">
                     <option value="">-- pilih --</option>
                     <option value="L">Laki</option>
                     <option value="P">Perempuan</option>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Alamat tinggal</label>
-            </td>
-            <td>
-                <textarea name="form_alamat" rows="5" cols="50"></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Nomor Induk Pegawai</label>
-            </td>
-            <td>
-                <input type="text" name="form_nip">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Tanggal Lahir</label>
-            </td>
-            <td>
-                <input type="date" name="form_tgl_lahir">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Nomor Telpon</label>
-            </td>
-            <td>
-                <input type="text" name="form_notelp">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Departemen</label>
-            </td>
-            <td>
-                <select name="form_departemen">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Alamat tinggal</label>
+                <textarea class="form-control" name="form_alamat" rows="5" cols="50"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nomor Induk Pegawai</label>
+                <input class="form-control" type="text" name="form_nip">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tanggal Lahir</label>
+                <input class="form-control" type="date" name="form_tgl_lahir">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nomor Telpon</label>
+                <input class="form-control" type="text" name="form_notelp">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Departemen</label>
+                <select class="form-select" name="form_departemen">
                     <option value="">-- pilih --</option>
                     <% dept.forEach( (dp)=>{ %>
                         <option value="<%= dp.id %>"><%= dp.nama %> (<%= dp.singkatan %>)</option>
                     <% }) %>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Agama</label>
-            </td>
-            <td>
-                <select name="form_agama">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Agama</label>
+                <select class="form-select" name="form_agama">
                     <option value="">-- pilih --</option>
                     <% agama.forEach( (agm)=>{ %>
                         <option value="<%= agm.id %>"><%= agm.nama %></option>
                     <% }) %>
                 </select>
-            </td>
-        </tr>
-    </table>
-    <br>
+            </div>
+        </div>
+    </div>
 
-    <button type="submit">simpan</button>
+    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Simpan</button>
 </form>
+
+<%- include('../layout/foot') %>
