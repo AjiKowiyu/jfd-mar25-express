@@ -1,4 +1,5 @@
-const moment = require('moment')
+const moment    = require('moment')
+const path      = require('path')
 const {body, query, validationResult} = require('express-validator')
 moment.locale('id')
 
@@ -133,5 +134,47 @@ module.exports =
         } catch (error) {
             throw error
         }
+    },
+
+
+
+    proses_update_foto: async(req,res)=>{
+        let id_kry      = req.params.id_karyawan
+        let data_kry    = await model_karyawan.getOne(id_kry)
+        let foto        = req.files.form_fotokaryawan
+        
+        // ganti nama file asli
+        let nama            = data_kry[0].nama
+        let nip             = data_kry[0].nip
+        let datetime        = moment().format('YYMMDD_HHmmss')
+        let extension_name  = path.extname(foto.name)
+        let filename        = nama + '-' + nip + '-' + datetime + extension_name
+        let folder_simpan   = path.join(__dirname, '../public/upload-image', filename)
+
+        try {
+            // pakai function mv() untuk meletakkan file di suatu folder/direktori
+            foto.mv(folder_simpan, async function(errorUpload) {
+                // jika upload gagal
+                if (errorUpload) {
+                    return res.status(500).send(err)
+                }
+
+                // jika foto berhasil masuk ke folder
+                let dataSQL = {
+                    foto: filename,
+                }
+                let updateKeDB = await model_karyawan.update(dataSQL, id_kry)
+
+                // jika berhasil update ke db
+                if (updateKeDB) {
+                    res.redirect(`/karyawan?msg=Berhasil update foto karyawan a/n ${nama}`)
+                }
+            })
+        }
+        catch (error) {
+            throw error
+        }
     }
+
+
 }

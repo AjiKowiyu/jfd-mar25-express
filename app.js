@@ -48,6 +48,7 @@ app.post('/karyawan/proses-simpan', cek_login, validasi_insertKaryawanBaru, cont
 app.get('/karyawan/hapus/:id_karyawan', cek_login, controller_karyawan.hapus)
 app.get('/karyawan/edit/:id_karyawan', cek_login, controller_karyawan.halaman_karyawan_form_edit)
 app.post('/karyawan/proses-update/:id_karyawan', cek_login, controller_karyawan.proses_update)
+app.post('/karyawan/proses-update-foto/:id_karyawan', cek_login, controller_karyawan.proses_update_foto)
 
 app.get('/login', controller_auth.halaman_login)
 app.post('/auth/proses-login', controller_auth.proses_login)

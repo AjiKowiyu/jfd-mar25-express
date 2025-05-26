@@ -12,10 +12,14 @@
 <% if (dakar[0]) { %>
     <div class="card mb-3">
         <div class="row g-0">
-            <div class="col-md-4">
-                <img src="..." class="img-fluid rounded-start" alt="...">
+            <div class="col-md-3 p-2">
+                <% if (dakar[0].foto) { %>
+                    <img class="img-fluid rounded-start" style="height: 280px; object-fit: contain;" src="/upload-image/<%= dakar[0].foto %>" alt="foto <%= dakar[0].nama %>">
+                <% } else { %>
+                    <img class="img-fluid rounded-start" style="height: 280px; object-fit: contain;" src="/img/image-placeholder.png" alt="foto <%= dakar[0].nama %>">
+                <% } %>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card-body">
                     <h5 class="card-title"><%= dakar[0].nama %></h5>
                     <p class="card-text">
