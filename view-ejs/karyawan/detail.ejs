@@ -1,46 +1,62 @@
+<%- include('../layout/head') %>
+
+
 <h1>Biodata Karyawan</h1>
 <hr>
 
-<a href="/karyawan">
-    <button>kembali ke data karyawan</button>
+<a href="/karyawan" class="btn btn-info shadow-sm">
+    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
 </a>
 <br><br>
 
 <% if (dakar[0]) { %>
-    <table>
-        <tr>
-            <td>NIP</td>
-            <td>: <%= dakar[0].nip %></td>
-        </tr>
-        <tr>
-            <td>Nama</td>
-            <td>: <%= dakar[0].nama %></td>
-        </tr>
-        <tr>
-            <td>Jenis Kelamin</td>
-            <td>: <%= dakar[0].gender %></td>
-        </tr>
-        <tr>
-            <td>Alamat tinggal</td>
-            <td>: <%= dakar[0].alamat %></td>
-        </tr>
-        <tr>
-            <td>Tanggal lahir</td>
-            <td>: <%= moment(dakar[0].tanggal_lahir).format('dddd, DD MMMM YYYY') %></td>
-        </tr>
-        <tr>
-            <td>Nomor Telepon</td>
-            <td>: <%= dakar[0].nomor_telp %></td>
-        </tr>
-        <tr>
-            <td>Departemen</td>
-            <td>: <%= dakar[0].dept_nama %> (<%= dakar[0].singkatan %>)</td>
-        </tr>
-        <tr>
-            <td>Agama</td>
-            <td>: <%= dakar[0].agama_nama %></td>
-        </tr>
-    </table>
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="..." class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><%= dakar[0].nama %></h5>
+                    <p class="card-text">
+                        <div class="row">
+                            <div class="col-lg-3">NIP</div>
+                            <div class="col-lg-9">: <%= dakar[0].nip %></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">Alamat tinggal</div>
+                            <div class="col-lg-9">: <%= dakar[0].alamat %></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">Tanggal lahir</div>
+                            <div class="col-lg-9">: <%= moment(dakar[0].tanggal_lahir).format('dddd, DD MMMM YYYY') %></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">Jenis Kelamin</div>
+                            <div class="col-lg-9">: <%= (dakar[0].gender == 'L') ? 'Laki' : 'Perempuan' %></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">Nomor Telepon</div>
+                            <div class="col-lg-9">: <%= dakar[0].nomor_telp %></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">Departemen</div>
+                            <div class="col-lg-9">: <%= dakar[0].dept_nama %> (<%= dakar[0].singkatan %>)</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3">Agama</div>
+                            <div class="col-lg-9">: <%= dakar[0].agama_nama %></div>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 <% } else { %>
     <h2>Data tidak ditemukan</h2>
 <% } %>
+
+
+
+
+<%- include('../layout/foot') %>

@@ -1,3 +1,6 @@
+<%- include('../layout/head') %>
+
+
 <h1>Edit profil karyawan</h1>
 <hr>
 
@@ -10,87 +13,61 @@
 <% } %>
 
 <form action="/karyawan/proses-update/<%= dakar[0].id %>" method="post">
-    <table>
-        <tr>
-            <td>
-                <label>Nama lengkap</label>
-            </td>
-            <td>
-                <input type="text" name="form_namalengkap" value="<%= dakar[0].nama %>">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Jenis Kelamin</label>
-            </td>
-            <td>
-                <select name="form_gender">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="mb-3">
+                <label class="form-label">Nama lengkap</label>
+                <input class="form-control" type="text" name="form_namalengkap" value="<%= dakar[0].nama %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Jenis Kelamin</label>
+                <select class="form-select" name="form_gender">
                     <option value="">-- pilih --</option>
                     <option <%= (dakar[0].gender == 'L') ? 'selected' : '' %> value="L">Laki</option>
                     <option <%= (dakar[0].gender == 'P') ? 'selected' : '' %> value="P">Perempuan</option>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Alamat tinggal</label>
-            </td>
-            <td>
-                <textarea name="form_alamat" rows="5" cols="50"><%= dakar[0].alamat %></textarea>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Nomor Induk Pegawai</label>
-            </td>
-            <td>
-                <input type="text" name="form_nip" value="<%= dakar[0].nip %>">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Tanggal Lahir</label>
-            </td>
-            <td>
-                <input type="date" name="form_tgl_lahir" value="<%= moment(dakar[0].tanggal_lahir).format('YYYY-MM-DD') %>">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Nomor Telpon</label>
-            </td>
-            <td>
-                <input type="text" name="form_notelp" value="<%= dakar[0].nomor_telp %>">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Departemen</label>
-            </td>
-            <td>
-                <select name="form_departemen">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Alamat tinggal</label>
+                <textarea class="form-control" name="form_alamat" rows="5" cols="50"><%= dakar[0].alamat %></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nomor Induk Pegawai</label>
+                <input class="form-control" type="text" name="form_nip" value="<%= dakar[0].nip %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tanggal Lahir</label>
+                <input class="form-control" type="date" name="form_tgl_lahir" value="<%= moment(dakar[0].tanggal_lahir).format('YYYY-MM-DD') %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nomor Telpon</label>
+                <input class="form-control" type="text" name="form_notelp" value="<%= dakar[0].nomor_telp %>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Departemen</label>
+                <select class="form-select" name="form_departemen">
                     <option value="">-- pilih --</option>
                     <% dept.forEach( (dp)=>{ %>
                         <option <%= (dakar[0].departemen_id == dp.id) ? 'selected' : '' %> value="<%= dp.id %>"><%= dp.nama %> (<%= dp.singkatan %>)</option>
                     <% }) %>
                 </select>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Agama</label>
-            </td>
-            <td>
-                <select name="form_agama">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Agama</label>
+                <select class="form-select" name="form_agama">
                     <option value="">-- pilih --</option>
                     <% agama.forEach( (agm)=>{ %>
                         <option <%= (dakar[0].agama_id == agm.id) ? 'selected' : '' %> value="<%= agm.id %>"><%= agm.nama %></option>
                     <% }) %>
                 </select>
-            </td>
-        </tr>
-    </table>
-    <br>
+            </div>
+        </div>
+    </div>
 
-    <button type="submit">update</button>
+    <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-floppy-disk me-1"></i> Update
+    </button>
 </form>
+
+
+<%- include('../layout/foot') %>
