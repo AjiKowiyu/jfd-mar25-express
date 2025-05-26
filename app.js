@@ -1,6 +1,7 @@
 const express   = require('express')
 const app       = express()
 const session   = require('express-session')
+const fileUpload= require('express-fileupload')
 const {body, query, validationResult} = require('express-validator')
 
 
@@ -16,6 +17,7 @@ let cek_login           = controller_auth.cek_login
 // yang dikirimkan melalui protokol http
 app.use( express.urlencoded({extended:false}) )
 app.use( express.static('public') )
+app.use( fileUpload() )
 app.use( session({
     secret: 'rahasia',
     resave: true,
